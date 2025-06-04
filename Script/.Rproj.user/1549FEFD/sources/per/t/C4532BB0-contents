@@ -1,0 +1,9 @@
+---
+output:
+  officedown::rdocx_document:
+    reference_docx: ../Donnees/Modele.docx
+    pandoc_args: ["--output=../Sorties/test.docx"]
+---
+
+see figure \@ref(fig:boxplot) and table \@ref(tab:mtcars)!
+

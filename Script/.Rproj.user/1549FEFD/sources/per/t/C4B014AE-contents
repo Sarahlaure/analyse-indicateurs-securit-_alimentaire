@@ -1,0 +1,757 @@
+---
+output: 
+  officedown::rdocx_document:
+    reference_docx: ../Donnees/Modèle.docx
+    pandoc_args: ["--output=../Sorties/Examen_Final_FogwoungSarahLaure_ISEP3333.docx"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      comment = NA)
+library(flextable)
+library(dplyr)
+```
+
+```{r page_garde_1}
+flextable(data.frame(Contenu = "REPUBLIQUE DU SENEGAL")) %>%
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  # Application de la police
+  font(fontname = "Times New Roman", part = "all") %>% 
+  fontsize(size = 14, part = "all") %>% 
+  # Mise en forme du texte
+  bold(i = 1, j = 1) %>% 
+  align(align = "center") %>% 
+  set_table_properties(layout = "autofit", width = 1)
+```
+
+|                                                     |
+|:---------------------------------------------------:|
+| ![](../Donnees/LOGO3.jpg){width="3cm" height="3cm"} |
+
+```{r page_garde_2}
+flextable(data.frame(Contenu = c( "**********",
+                                  "Un Peuple - Un But - Une Foi",
+                                  "**********",
+                                  "Agence nationale de la Statistique et de la démographie"))) %>% 
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  # Application de la police
+  font(fontname = "Times New Roman", part = "all") %>% 
+  fontsize(size = 14, part = "all") %>% 
+  # Mise en forme du texte
+  bold(i = 1:4, j = 1) %>% 
+  italic(i = 2, j = 1) %>% 
+  align(align = "center") %>% 
+  set_table_properties(layout = "autofit", width = 1)
+```
+
+|                                          |
+|:----------------------------------------:|
+| ![](../Donnees/LOGO2.jpg){width="3.5cm"} |
+
+```{r page_garde_3}
+flextable(data.frame(Contenu = c("**********",
+                                  "Ecole nationale de la Statistique et de l'Analyse économique Pierre Ndiaye"))) %>%
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  # Application de la police
+  font(fontname = "Times New Roman", part = "all") %>% 
+  fontsize(size = 14, part = "all") %>% 
+  # Mise en forme du texte
+  bold(i = 1:2, j = 1) %>% 
+  align(align = "center") %>% 
+  set_table_properties(layout = "autofit", width = 1)
+```
+
+|                                                       |
+|:-----------------------------------------------------:|
+| ![](../Donnees/LOGO1.jpg){width="2.5cm" height="2cm"} |
+
+```{r page garde_4}
+flextable(data.frame(Contenu = "Examen final de projet statistique avec R")) %>%
+  delete_part(part = "header") %>% 
+  border_remove() %>% 
+  # Application de la police
+  font(fontname = "Times New Roman", part = "all") %>% 
+  fontsize(size = 15, part = "all") %>% 
+  # Mise en forme du texte
+  italic(i = 1, j = 1) %>% 
+  align(align = "center") %>% 
+  set_table_properties(layout = "autofit", width = 1)
+```
+
+# EVALUATION
+
+$$
+$$
+
+```{r page_garde_5}
+donnees <- data.frame(
+  col1 = c("Fait par", "Fogwoung Djoufack Sarah-Laure", "Élève Ingénieure Statisticienne Économiste"),
+  col2 = c("Sous la supervision de", "M. Aboubacar HEMA", "Research analyst"),
+  stringsAsFactors = FALSE
+)
+flextable(donnees) %>% 
+  delete_part(part = "header") %>% 
+  width(j = 1:2, width = 0.5) %>%  
+  align(j = 1, align = "left") %>% 
+  align(j = 2, align = "right") %>% 
+  border_remove() %>% 
+  bold(i = 1, j = 1:2) %>% 
+  italic(i = 3, j = 1:2) %>% 
+  set_table_properties(layout = "autofit", width = 1) %>%  # Force la largeur totale
+  fontsize(size = 11)  
+```
+
+|                                |
+|:------------------------------:|
+| **Année académique 2024-2025** |
+
+\newpage
+
+# Introduction
+
+
+CODE POUR L'INSTALLATION ET LE CHARGEMENT DES PACKAGES
+
+Les différents packages qui seront utilisés dans le cadre de ce projet sont readr, haven, utils, gtsummary, janitor, tidyverse et labelled. 
+
+```{r packages}
+
+# Les packages sont chargés dans le code ci-dessous. Si l’un d’eux n’est pas installé sur votre machine, il sera installé automatiquement.
+
+packages <- c("readr", "gt", "haven", "sf", "utils", "glue", "gtsummary", "janitor", "tidyverse", "labelled","knitr", "flextable","officedown","officer", "questionr")
+
+for (pkg in packages) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    # Installe en silence
+    invisible(
+      capture.output(
+        suppressMessages(
+          install.packages(pkg, quiet = TRUE)
+        )
+      )
+    )
+  }
+  # Pour ne pas afficher les messages d'installation
+  suppressPackageStartupMessages(
+    library(pkg, character.only = TRUE)
+  )
+}
+#install.packages(..., quiet = TRUE) supprime la plupart des messages d’URL et de décompression.
+#suppressMessages() masque les éventuels messages R générés par install.packages().
+#capture.output() + invisible() empêche toute sortie console résiduelle d’apparaître.
+#suppressPackageStartupMessages() empêche l’affichage des messages de démarrage lors de library().
+
+```
+\newpage
+
+# Sommaire
+
+<!---BLOCK_TOC--->
+
+\newpage
+
+# Liste des figures
+
+<!---BLOCK_TOC{seq_id: 'fig'}--->
+
+# Liste des tableaux
+
+<!---BLOCK_TOC{seq_id: 'tab'}--->
+
+
+
+\newpage
+
+
+
+
+
+```{r theme_tableau}
+# Thème pour les tableaux gtsummary
+set_gtsummary_theme(theme_gtsummary_compact())
+
+# Appliquer un thème par défaut pour tous les tableaux gt
+gt_compact_theme <- function(gt_table) {
+  gt_table %>%
+    opt_table_font(font = "Arial") %>%
+    opt_row_striping() %>%
+    opt_table_lines(extent = "none") %>%  # Supprime la plupart des lignes de séparation
+    opt_align_table_header(align = "left") %>%
+    tab_options(
+      table.font.size = 10,                       # Réduit la taille de la police
+      data_row.padding = px(2),                   # Réduit l'espacement vertical des lignes
+      heading.padding = px(2),
+      column_labels.padding = px(2),
+      table.border.top.width = px(0),
+      table.border.bottom.width = px(0),
+      heading.align = "left",
+      column_labels.border.top.width = px(0),
+      column_labels.border.bottom.width = px(0),
+      row_group.border.top.width = px(0),
+      row_group.border.bottom.width = px(0)
+    )
+}
+
+```
+
+Chargement des données, apercu des premieres lignes, dimension de la base et un tableau avec les noms des colonnes et leur labels
+
+```{r import_base1}
+### Importation de la base de données Baseline_mere
+# Chargement de la base de données Baseline_mere
+Baseline_mere <- read_dta("../Donnees/food_comp_mother_baseline.dta") %>%
+  mutate(across(where(is.labelled), ~as_factor(.)))  # Convertit les variables étiquetées en facteurs
+
+Endline_mere <- read_dta("../Donnees/food_comp_mother_endline.dta") %>%
+  mutate(across(where(is.labelled), ~as_factor(.)))  # Convertit les variables étiquetées en facteurs
+
+menage <- read_dta("../Donnees/ehcvm_menage_bfa2021.dta") %>%
+  mutate(across(where(is.labelled), ~as_factor(.)))  # Convertit les variables étiquetées en facteurs
+
+individu <- read_dta("../Donnees/ehcvm_individu_bfa2021.dta") %>%
+  mutate(across(where(is.labelled), ~as_factor(.)))  # Convertit les variables étiquetées en facteurs
+
+# Affichage des 8 premières lignes avec numérotation automatique et caption
+first_rows_flextable <- Baseline_mere %>% 
+  select(1:8) %>% 
+  head() %>% 
+  flextable() %>%
+  set_caption("Premières observations de la base mother baseline") %>%
+  autofit() %>%
+  fontsize(size = 9, part = "all") %>%     # Réduire la taille de la police
+  padding(padding = 2, part = "all") %>%   # Réduire l'espacement interne
+  set_table_properties(width = 1, layout = "autofit") %>%
+  align(align = "center", part = "all")
+
+# Dimension de la base
+cat("La base Baseline_mere contient", nrow(Baseline_mere), "observations et", ncol(Baseline_mere), "variables.")
+
+# Création d’un tableau avec les noms des labels, si le label n'existe pas, on va mettre (Pas de label pour cette variable) et caption
+labels <- var_label(Baseline_mere)
+labels_clean <- sapply(labels, function(x) {
+  if (is.null(x)) {
+    "(Pas de label pour cette variable)"
+  } else {
+    x
+  }
+})
+
+variable_labels_flextable <- tibble(
+  Nom_de_variable = names(Baseline_mere),
+  Label = labels_clean
+) %>%
+  flextable() %>%
+  set_caption("Nom des variables et leurs labels") %>%
+  autofit() %>%
+  fontsize(size = 9, part = "all") %>%     # Réduire la taille de la police
+  padding(padding = 2, part = "all") %>%   # Réduire l'espacement interne
+  set_table_properties(width = 1, layout = "autofit") %>%
+  align(align = "center", part = "all")
+
+
+# Affichage des tableaux dans le document Word (les deux tableaux avec captions)
+first_rows_flextable
+variable_labels_flextable
+
+```
+
+
+Visualisation du nombre de doublons dans toute la base de données 
+
+```{r, doublons_base_Baseline}
+cat("La base mother_baseline contient", sum(duplicated(Baseline_mere)), "doublon.")
+```
+
+Visualisation du nombre de doublons sur une seule variable de la base de données:
+
+```{r doublons_variablehhid}
+
+# Affiche le nombre de doublons
+nb_doublons <- sum(duplicated(Baseline_mere$hhid))
+cat("Nombre de doublons trouvés dans la base menage sur la variable hhid est de : ", nb_doublons, "\n")
+```
+
+Visualisation du nombre de doublons pour quelques variables d'une base de données: 
+
+```{r nbre_doublons_3variables, tab.cap="Nombre de doublons"}
+
+# Création du tableau et affectation à un objet
+nbre_doublons_flex <- menage %>%
+  select(enquete, logem, hhid) %>%
+  summarise(across(everything(), ~sum(duplicated(.)))) %>%
+  pivot_longer(cols = everything(),
+               names_to = "Variable", 
+               values_to = "Nombre_doublons") %>%
+  arrange(desc(Nombre_doublons)) %>%
+  flextable() %>% 
+  # Légende et mise en forme
+  set_caption(
+    caption = "Nombre de doublons pour trois variables sélectionnées",
+    autonum = run_autonum(seq_id = "tab", bkm = "tab_doublons")  # Numérotation automatique
+  ) %>%
+   
+  # Thème de mise en forme avancée
+  theme_booktabs() %>%  # Applique un style avec des lignes propres
+  bg(bg = "#4472C4", part = "header") %>%  # Fond bleu pour les en-têtes
+  color(color = "white", part = "header") %>%  # Texte blanc dans les en-têtes
+  bold(part = "header") %>%  # En-têtes en gras
+  
+  # Formatage conditionnel pour les doublons
+  color(i = ~ Nombre_doublons > 0, color = "red") %>%  # Doublons en rouge
+  bg(j = 2, bg = function(x) {  # Fond conditionnel de la colonne Nombre_doublons
+    ifelse(x > 0, "#F4CCCC", "#FFFFFF")  # Fond rose pour les doublons
+  }) %>%
+  
+  # Formatage de la première colonne (Variable)
+  bold(j = 1) %>%  # Gras pour les noms de variables
+  align(align = "center", part = "all") %>%  # Alignement centré
+  valign(valign = "center", part = "all") %>%  # Alignement vertical centré
+  padding(padding = 4, part = "all") %>%  # Espacement dans les cellules
+  fontsize(size = 10, part = "all") %>%  # Taille de la police
+  # Bordures
+  hline_top(border = fp_border(color = "#4472C4", width = 2), part = "header") %>%  # Bordure en haut
+  hline_bottom(border = fp_border(color = "#4472C4", width = 1), part = "body") %>%  # Bordure en bas du corps
+  
+  # Ajustement automatique
+  autofit()
+
+# Affichage du tableau
+nbre_doublons_flex
+
+```
+
+Vérification si les lignes qui ont des hhid identiques ont les mêmes valeurs pour les autres variables de la base de données (On affiche la valeur du id dupliquée et voir s'il s'agit de lignes completement identiques. 
+ 
+```{r doublons_hhid_menage}
+
+# Identification des doublons
+doublons_hhid <- Baseline_mere[duplicated(Baseline_mere$hhid) | duplicated(Baseline_mere$hhid, fromLast = TRUE), ]
+
+# Affichage du résultat
+cat("Après analyse, nous voyons que:  ")
+
+# Vérification si les lignes dupliquées sont identiques ou non (uniquement si doublons existent)
+if (nrow(doublons_hhid) > 0) {
+  if (all(duplicated(doublons_hhid) | duplicated(doublons_hhid, fromLast = TRUE))) {
+    cat("les lignes avec des doublons sont complètement identiques.\n")
+  } else {
+    cat("les lignes avec des doublons ne sont pas complètement identiques.\n")
+  }
+}
+
+```
+
+# Suppression des lignes dupliquées 
+```{r suppression_doublon_menage}
+# Suppression des doublons identiques
+menage <- menage %>%
+  distinct()
+
+# Vérification que le doublon a bien été supprimé
+cat("Après suppression, le nombres de doublons restant sur la variable hhid de la base menage est de : ", sum(duplicated(menage$hhid)), " doublons restants.\n")
+
+```
+
+# Harmonisation des noms de variables 
+Tableau affichant les différents nom des de variables dans les deux bases de données.  A LA FIN, PENSER A AFFICHER LE TABLEAU A NOUVEAU POUR COMPARAISON. 
+
+```{r harmonisation_noms_variables}
+
+# Construction du tableau des noms de variables
+bases <- list(
+  `Mother Baseline` = names(Baseline_mere),
+  `Mother Endline`  = names(Endline_mere)
+)
+
+# Créer un data.frame rectangulaire
+max_len <- max(sapply(bases, length))
+df_vars <- lapply(bases, function(nms) {
+  length(nms) <- max_len
+  nms
+}) %>%
+  as.data.frame(stringsAsFactors = FALSE)
+
+# Générer le flextable avec le thème compact
+df_vars %>%
+  flextable() %>%
+  set_caption("**Noms des Variables par Base**") %>%  # Ajouter un titre
+  autofit()  # Ajuster la taille des colonnes automatiquement
+```
+
+AFFICHAGE DE LABEL DE VARIABLES QUI DIFFERAIENT POUR COMPARAISONS
+ 
+```{r labels}
+cat("Le label de la varibale V1 de la base mother_baseline est :", attr(Baseline_mere$V1, "label"), " et celui de la variable energ_kcal de la base mother_endline est :", attr(Endline_mere$energ_kcal, "label"), "\n\n")
+```
+
+TABLEAU AVEC LES NOMBRES DE VAELURS MANQUANTES PAR VARIABLE, A LA FIN, PENSER A AFFICHER CE TABLEAU POUR QU'ON VOIT QUE LA CORRECTION A BIEN ETTE FAITE
+
+```{r na_par_variable}
+
+# Variables catégorielles à vérifier
+vars <- c("regionid", "communeid", "villageid", "round", "s1_q0", "s1_q1", "s1_q2")
+
+# Bases à vérifier
+bases <- list(
+  mother_baseline = Baseline_mere,
+  mother_endline = Endline_mere
+)
+
+# Vérification des valeurs manquantes
+na_tab <- purrr::map_dfr(names(bases), function(nom) {
+  df <- bases[[nom]]
+  data.frame(Variable = intersect(vars, names(df)),
+             Base = nom,
+             NAs = sapply(intersect(vars, names(df)), \(v) sum(is.na(df[[v]]))))
+}) %>% pivot_wider(names_from = Base, values_from = NAs, values_fill = 0)
+
+# Affichage avec flextable SANS compose()
+flextable(na_tab) %>%
+  set_caption("Valeurs manquantes par variable et base") %>%
+  autofit()
+```
+
+Affichons les obseravtions qui contiennent des valeurs manquantes au niveau de ces variables :
+
+
+```{r individu_avec_na}
+individu_na <- Baseline_mere %>%
+  filter(is.na(regionid) | is.na(communeid))
+# Sélectionner les premières colonnes et créer le tableau avec gt
+individu_na_gt <- individu_na %>% 
+  select(1:8) %>%
+  gt() %>%
+  tab_header(title = "s valeurs manquantes au niveau de la variable regionid et communeid")
+
+# Si tu veux utiliser flextable pour ajuster, tu dois d'abord convertir le tableau en data.frame
+individu_na_df <- individu_na %>% select(1:8)
+
+individu_na_flex <- flextable(individu_na_df) %>%
+  set_caption("Tableau : Observations avec valeurs manquantes dans 'regionid' et 'communeid'") %>%
+  autofit() %>%
+  fontsize(size = 9, part = "all") %>%     # Réduire la taille de la police
+  padding(padding = 2, part = "all") %>%   # Réduire l'espacement interne
+  set_table_properties(width = 1, layout = "autofit")  # Ajuster à la largeur disponible
+# Affichage du tableau flextable
+individu_na_flex
+```
+
+S'IL S'AGIT DES NA CONDITIONNEES (Genre on ne regarde juste pas na, mais une condition est remplis avant pour que ce soit na )
+
+```{r na_continues}
+
+mother_baseline_Yes<- Baseline_mere %>%
+  filter(s1_q1 == "Yes")
+mother_endline_Yes<- Endline_mere %>%
+  filter(s1_q1 == "Yes")
+
+
+# Variables catégorielles à vérifier
+vars <- c("energ_kcal", "protein_g", "lipid_tot_g")
+
+# Bases à vérifier
+bases <- list(
+  mother_baseline = mother_baseline_Yes,
+  mother_endline = mother_endline_Yes
+)
+
+# Vérification des valeurs manquantes
+na_tab <- purrr::map_dfr(names(bases), function(nom) {
+  df <- bases[[nom]]
+  data.frame(Variable = intersect(vars, names(df)),
+             Base = nom,
+             NAs = sapply(intersect(vars, names(df)), \(v) sum(is.na(df[[v]]))))
+}) %>% pivot_wider(names_from = Base, values_from = NAs, values_fill = 0)
+
+# Utilisation de gt pour créer un tableau
+na_tab_gt <- gt(na_tab) %>% 
+  tab_header(title = md("**Valeurs manquantes par variable continues et par bases pour les observations ayant répondu 'oui' à la question 'meal consumed?'**"))
+
+# Utilisation de gt pour créer un tableau
+na_tab_gt <- gt(na_tab) %>% 
+  tab_header(title = md("**Valeurs manquantes par variable continues et par bases pour les observations ayant répondu 'oui' à la question 'meal consumed?'**"))
+
+# Convertir le tableau gt en data.frame pour l'utiliser avec flextable
+na_tab_df <- as.data.frame(na_tab)
+
+# Créer un flextable à partir du data.frame
+na_tab_flex <- flextable(na_tab_df) %>%
+  autofit() %>%
+  flextable::set_caption("Table 1 : Valeurs manquantes par variable continues et par bases")
+
+# Afficher le tableau
+na_tab_flex
+```
+
+Tableau avec gt summary poour voir le nombre de frequence de chaque modalités pour les variables catégorielles et les stats desc pour les variables numériques. 
+ICI LA MOYENNE ET L'ECART TYPE SONT CALCULES EN CONSIDERANT LES VALEURS NON MANQUANTES. 
+```{r frequence_stats_modalites }
+# Conversion en facteurs, sélection des colonnes et création d'un tableau résumé personnalisé
+menage %>% 
+  labelled::to_factor() %>%  # Conversion des variables en facteurs selon leurs étiquettes
+  dplyr::select(logem, sol, superf, grosrum, petitrum) %>% # Extraction des colonnes d'intérêt
+  gtsummary::tbl_summary(
+    label = list(
+      logem    ~ "Toit en materiaux définitif",         # Libellés personnalisés
+      sol     ~ "Sol en materiaux définitif",            
+      superf  ~ "Superficie cultivée",                   
+      grosrum ~ "gros ruminant",                         
+      petitrum~ "petit ruminants"                        
+    ),
+    statistic = list(  # Afficher les statistiques
+      superf  ~ "{mean} ({sd})",                       
+      grosrum ~ "{mean} ({sd})",                       
+      petitrum~ "{mean} ({sd})"                 
+    ),
+    digits = dplyr::everything() ~ c(1, 1, 1, 1, 1, 1),   # Formatage numérique avec 1 décimales
+    missing = "always",        # Affiche systématiquement les valeurs manquantes
+    missing_text = "Valeurs manquantes"        # Remplace les valeurs manquantes par "NA"
+  ) %>% 
+  gtsummary::modify_header(label = "Caractéritiques logement") %>% 
+    as_flex_table() %>% 
+  autofit() %>% 
+    flextable::set_caption("Tableau 1 : Résumé du type de toit et de sol")
+```
+
+TABLEAU POUR AFFICHER LES STATS SUIVANT LES MODALITES D'UNE AUTRE VARIABLE
+
+```{r stats_suivant_modalite}
+tbl_summary_example <- individu %>%
+  tbl_summary(
+    by = milieu,  
+    include = c(branch, diplome, educ_hi),
+    label = list(
+      branch ~ "Branche d'activité",  
+      diplome ~ "Plus haut diplôme du chef de ménage", 
+      educ_hi ~ "Niveau d'éducation"
+    ),
+    statistic = all_continuous() ~ "{mean} ({sd})",
+    digits = all_continuous() ~ 2,
+    missing = "ifany"
+  ) %>%
+  modify_header(
+    label ~ "Nom de variables",
+    stat_1 ~ "**Milieu urbain**",
+    stat_2 ~ "**Milieu rural**"
+  )%>%
+  as_flex_table() %>%
+  autofit() %>%
+  flextable::set_caption("Tableau 1 : Résumé du type de toit et de sol")
+
+# Affichage du tableau
+tbl_summary_example
+
+```
+
+AJOUTSSSS SUR LE TABLEAU
+
+- AJOUTER UNE COLONNE AVEC LES STATS GLOBALES 
+- AFFICHER POUR CHAQUE VARIABLE,LE NOMBRE DE VALEURS NON MANQUANTES 
+- Modifier les entetes des colonnes 
+
+```{r stats_avec_colonne_totaux}
+tbl_summary_overall <- individu %>%
+  tbl_summary(
+    by = milieu,  
+    include = c(branch, diplome, educ_hi),
+    label = list(
+      branch ~ "Branche d'activité",  
+      diplome ~ "Plus haut diplôme du chef de ménage", 
+      educ_hi ~ "Niveau d'éducation"
+    ),
+    statistic = all_continuous() ~ "{mean} ({sd})",
+    digits = all_continuous() ~ 2,
+    missing = "ifany"
+  ) %>%
+  add_overall(
+    last = TRUE,
+    col_label = "**Totaux** {N}"
+  ) %>%
+  add_n(
+    col_label = "**Effectif**",
+    statistic = "{N_nonmiss}"
+  ) %>%
+  modify_table_styling(
+    columns = everything(),
+    footnote = "Nbre d'observations non manquantes"
+  ) %>%
+  modify_header(
+    label ~ "Nom de variables",
+    stat_1 ~ "**Milieu urbain**",
+    stat_2 ~ "**Milieu rural**"
+  ) %>%
+  bold_labels() %>%
+  as_flex_table() %>%
+  autofit() %>%
+  flextable::set_caption("Tableau 1 : Statistiques descriptives selon le milieu")
+
+# Affichage du tableau
+tbl_summary_overall
+
+
+```
+
+
+COMBINER DEUX TABLEAUX 
+
+EMPILEMENT HORIZONTAL
+(INTERPRETATION EN DESSOUS)
+```{r modif_nom_entete_horizontal}
+tbl_1 <- individu %>%
+  tbl_summary(by = milieu, include = c(age, hhweight))
+
+tbl_2 <- individu %>%
+  tbl_summary(by = zae, include = c(age, hhweight))
+
+# Fusionner les deux tableaux dans une liste
+tbl_combined <- tbl_merge(
+  list(tbl_1, tbl_2), 
+  tab_spanner = c("Tableau 1 - Par milieu de résidence", "Tableau 2 - Par zone agroécologique")
+)%>%
+modify_header(label~ "Nom de variables/Modalités")%>%
+  as_flex_table() %>%
+  autofit() %>%
+  flextable::set_caption("Tableau 1 : Statistiques descriptives selon le milieu")
+
+# Afficher le tableau fusionné
+tbl_combined
+
+```
+INTERPRETATION: 
+Enn milieu urbain, l'age median eest de 18
+Au grand ouest, l'age median est de 20
+
+EMPILEMENT VERTICAL
+```{r modif_nom_entete_vertical}
+tbl_1 <- individu %>%
+  tbl_summary(by = milieu, include = c(age, hhweight))
+
+tbl_2 <- individu %>%
+  tbl_summary(by = zae, include = c(age, hhweight))
+
+# Fusionner les deux tableaux dans une liste
+tbl_stacked <- tbl_stack(
+  list(tbl_1, tbl_2), 
+  group_header = c("Tableau 1 - Par milieu de résidence", "Tableau 2 - Par zone agroécologique")
+)%>%
+modify_header(label~ "Nom de variables/Modalités")%>%
+  as_flex_table() %>%
+  autofit() %>%
+  flextable::set_caption("Tableau 1 : Statistiques descriptives selon le milieu")
+
+# Afficher le tableau fusionné
+tbl_stacked
+
+```
+MAUVAISE INTERRPRETATION RSIQUEE DONC PRIVILEGIER LE TABLE MERGE 
+
+## GRAPHIQUES: on met le fig.
+```{r graph-toit, fig.cap=" Répartition du type de toit Sarah"}
+menage %>%
+  filter(!is.na(toit)) %>%
+  ggplot(aes(x = factor(toit))) +
+  geom_bar(fill = "steelblue") +
+  labs(
+    title = "Répartition du type de toit",
+    x = "Type de toit",
+    y = "Effectif"
+  ) +
+  theme_minimal()
+```
+
+```{r graph-sol, fig.cap=" Répartition du type de sol"}
+menage %>%
+  filter(!is.na(sol)) %>%
+  ggplot(aes(x = factor(sol))) +
+  geom_bar(fill = "forestgreen") +
+  labs(
+    title = "Répartition du type de sol",
+    x = "Type de sol",
+    y = "Effectif"
+  ) +
+  theme_minimal()
+```
+
+```{r graph-superf, fig.cap="Distribution de la superficie du logementtttt"}
+menage %>%
+  filter(!is.na(superf)) %>%
+  ggplot(aes(x = superf)) +
+  geom_histogram(bins = 30, fill = "darkorange", color = "black") +
+  labs(
+    title = "Distribution de la superficie du logement",
+    x = "Superficie (m²)",
+    y = "Effectif"
+  ) +
+  theme_minimal()
+```
+PACKAGE JANITOR : NETOOYAGE DES BASES DE DONNEES 
+
+UTILISATION DE clean_names() de janitor pour nettoyer les noms de colonnes en les mettant en minuscules et en remplaçant les espaces ou autres caractères non valides par des underscores (_).
+
+```{r nettoyage_noms_variables}
+individu <- individu %>%
+  clean_names() 
+# Afficher les 8 premières lignes après nettoyage des noms
+individu %>%
+  select(1:8) %>%
+  head() %>%
+  flextable() %>%
+  set_caption("Premières observations de la base individu après nettoyage des noms") %>%
+  autofit() %>%
+  align(align = "center", part = "all")
+```
+
+SUPPRIMER DES LIGNES VIDES 
+```{r suppression_lignes_vides}
+individu <- individu %>% remove_empty(which = "rows")  # Supprimer les lignes vides
+individu <- individu %>% remove_empty(which = "cols")  # Supprimer les colonnes vides
+```
+
+clean_na():Nettoie les valeurs NA d'un dataframe en remplaçant celles-ci par une valeur de votre choix (par exemple, une chaîne vide ou une valeur spécifique).
+```{r nettoyage_na}
+#df <- df %>% clean_na(replacement = "")
+```
+
+OBTENIR LE NOMBRE DE DOUBLONS 
+```{r nbre_doublons}
+df_dupes <- individu %>% get_dupes()
+# Afficher le nombre de doublons
+nb_doublons <- nrow(df_dupes)
+cat("Nombre de doublons trouvés dans la base individu est de : ", nb_doublons, "\n")
+```
+CONVERSION NUMERIQUE EN FORMAT DATES
+Convertit les dates au format numérique (de type Excel) en objets de type Date.
+```{r conversion_dates}
+#df <- df %>%
+#  mutate(across(c(date1, date2), excel_numeric_to_date))
+```
+
+
+SLICE POUR SELECT UNE PORTION 
+
+FONCTION DANS JANITOr QUI PERMET DE VISUALISER LA PRESENCE DE NOMS DE VARIABLES 
+```{r janitor}
+
+# Comparaison des noms de colonnes
+comparaison_vars <- compare_df_cols(Baseline_mere, Endline_mere)
+
+# Création du tableau flextable
+comparaison_vars %>%
+  flextable() %>%
+  set_caption(
+    caption = "Comparaison des noms de variables entre les bases",
+    autonum = run_autonum(seq_id = "tab", bkm = "tab_comparaison_vars")
+  ) %>%
+  theme_booktabs() %>%
+  align(align = "center", part = "all") %>%
+  valign(valign = "center", part = "all") %>%
+  fontsize(size = 10, part = "all") %>%
+  autofit()
+```
+
+INTERFACE GRAPHIQUE :
