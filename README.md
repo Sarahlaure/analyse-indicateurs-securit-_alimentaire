@@ -58,3 +58,9 @@ Une application web a été développée pour :
 
 ## Livrables
 
+- Un document **R Markdown** structuré a été utilisé pour traiter l’ensemble des questions posées dans le cadre de l’examen.
+- Une version finale au format **Word** a été générée à partir de ce document pour la présentation des résultats.
+- Enfin, une **application Shiny interactive** a été développée, comprenant trois pages principales :
+    - **Page d’accueil** : propose une synthèse visuelle des indicateurs de sécurité alimentaire au niveau national, avec des encadrés pour la présentation de chaque indicateur.
+    - **Page d’exploration interactive** : permet la **visualisation cartographique** et la **comparaison des indicateurs** par région ou département, à l’aide de **filtres dynamiques**.
+    - **Page de documentation** : regroupe un **guide d’utilisation**, un **dictionnaire des variables**, ainsi que les **contributeurs** du projet.
